@@ -25,6 +25,8 @@
     .emoji-btn {
       font-size: 25px;
       border-radius: 50%;
+      width: 55px;
+      height: 55px;
     }
   </style>
 </head>
@@ -39,11 +41,11 @@
     <div id="bigEmoji" class="emoji-display mb-3">😐</div>
 
     <div class="d-flex justify-content-center gap-3 mb-4 flex-wrap">
-      <button class="btn btn-light emoji-btn" onclick="selectMood('Very Sad','😡')">😡</button>
-      <button class="btn btn-light emoji-btn" onclick="selectMood('Sad','😢')">😢</button>
-      <button class="btn btn-light emoji-btn" onclick="selectMood('Neutral','😐')">😐</button>
-      <button class="btn btn-light emoji-btn" onclick="selectMood('Happy','😊')">😊</button>
-      <button class="btn btn-light emoji-btn" onclick="selectMood('Very Happy','😍')">😍</button>
+      <button type="button" class="btn btn-light emoji-btn" onclick="selectMood('Very Sad','😡')">😡</button>
+      <button type="button" class="btn btn-light emoji-btn" onclick="selectMood('Sad','😢')">😢</button>
+      <button type="button" class="btn btn-light emoji-btn" onclick="selectMood('Neutral','😐')">😐</button>
+      <button type="button" class="btn btn-light emoji-btn" onclick="selectMood('Happy','😊')">😊</button>
+      <button type="button" class="btn btn-light emoji-btn" onclick="selectMood('Very Happy','😍')">😍</button>
     </div>
 
     <form id="feedbackForm">
@@ -78,6 +80,7 @@
 
 <script>
 let selectedMood = "Neutral";
+
 const scriptURL = "https://script.google.com/macros/s/AKfycbxHksbzeKMoXu00Ay7kjMvg00NimPyNr8wXaCsSXJvL32kroTzfoZhyUFTc_rxbs7hC/exec";
 
 function selectMood(mood, emoji) {
@@ -97,17 +100,20 @@ document.getElementById("feedbackForm").addEventListener("submit", function(e) {
 
   fetch(scriptURL, {
     method: "POST",
+    mode: "no-cors",   // 🔥 Important for Vercel
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(data)
   })
-  .then(res => res.json())
-  .then(response => {
+  .then(() => {
     document.getElementById("message").innerHTML =
       "<div class='alert alert-success'>Feedback submitted successfully!</div>";
 
     document.getElementById("feedbackForm").reset();
     document.getElementById("bigEmoji").innerText = "😐";
   })
-  .catch(error => {
+  .catch(() => {
     document.getElementById("message").innerHTML =
       "<div class='alert alert-danger'>Error submitting feedback.</div>";
   });
@@ -116,6 +122,3 @@ document.getElementById("feedbackForm").addEventListener("submit", function(e) {
 
 </body>
 </html>
-
-
-
